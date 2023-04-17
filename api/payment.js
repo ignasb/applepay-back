@@ -5,6 +5,11 @@ const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
 
+/* GET home page. */
+router.get("/", function (req, res, next) {
+  res.render("index", { title: "sandbox payments" });
+});
+
 router.post("/validateSession", async (req, res) => {
   const { appleUrl } = req.body;
   console.log(req);
@@ -22,7 +27,7 @@ router.post("/validateSession", async (req, res) => {
       appleUrl,
       {
         merchandIdentified: "merchant.online.ibsandbox",
-        domainName: "name",
+        domainName: "ibsandbox",
         displayName: "IB SANDBOX TEST",
       },
       httpsAgent,
