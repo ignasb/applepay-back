@@ -33,3 +33,5 @@ router.post("/validateSession", async (req, res) => {
     res.send(e);
   }
 });
+
+module.exports = router;
