@@ -26,7 +26,7 @@ router.post("/validateSession", async (req, res) => {
     const response = await axios.post(
       appleUrl,
       {
-        merchantIdentified: "merchant.online.ibsandbox",
+        merchantIdentifier: "merchant.online.ibsandbox",
         domainName: "ibsandbox",
         displayName: "IB SANDBOX TEST",
       },
