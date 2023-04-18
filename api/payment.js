@@ -12,7 +12,6 @@ router.get("/", function (req, res, next) {
 
 router.post("/validateSession", async (req, res) => {
   const { appleUrl } = req.body;
-  console.log(req);
 
   try {
     const httpsAgent = new https.Agent({
@@ -27,12 +26,13 @@ router.post("/validateSession", async (req, res) => {
       appleUrl,
       {
         merchantIdentifier: "merchant.online.ibsandbox",
-        domainName: "ibsandbox",
+        domainName: "ibsandbox.online",
         displayName: "IB SANDBOX TEST",
       },
       httpsAgent,
     );
 
+    console.log(response.data);
     res.send(response.data);
   } catch (e) {
     res.send(e);
