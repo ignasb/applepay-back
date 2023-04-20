@@ -17,22 +17,23 @@ router.post("/validateSession", async (req, res) => {
     const httpsAgent = new https.Agent({
       rejectUnauthorized: false,
       cert: await fs.readFileSync(
-        path.join(__dirname, "../certificates/pay-cert.pem"),
+        path.join(__dirname, "../certificates/merch.cer"),
       ),
-      // key: fs.readFileSync(path.join(__dirname, "/cert/cert_sandbox.key")),
+      key: fs.readFileSync(path.join(__dirname, "../certificates/merch.key")),
     });
 
     const response = await axios.post(
       appleUrl,
       {
         merchantIdentifier: "merchant.online.ibsandbox",
-        domainName: "ibsandbox.online",
+        domainName: "www.ibsandbox.online",
         displayName: "IB SANDBOX TEST",
       },
-      httpsAgent,
+      {
+        httpsAgent,
+      },
     );
 
-    console.log(response.data);
     res.send(response.data);
   } catch (e) {
     res.send(e);

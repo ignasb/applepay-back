@@ -4,13 +4,10 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const fs = require("fs");
-const cors = require("cors");
 
 const paymentRouter = require("./api/payment");
 
 const app = express();
-
-app.use(cors());
 
 // morgan logs
 app.use(
@@ -45,7 +42,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error", { title: "Error" });
+  res.render("error", { title: "error" });
 });
 
 module.exports = app;
