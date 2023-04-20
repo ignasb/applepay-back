@@ -4,6 +4,11 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
+const { Checkout } = require("checkout-sdk-node");
+
+const cko = new Checkout("sk_sbox_ytlhf7wsiqiehbpgps5jon5thez", {
+  pk: "pk_sbox_ehogtz7ksynphiim5e5nvvpcwuc",
+});
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -38,6 +43,34 @@ router.post("/validateSession", async (req, res) => {
   } catch (e) {
     res.send(e);
   }
+});
+
+router.post("/pay", async (req, res) => {
+  const { version, data, signature, header } = req.body.token.paymentData;
+
+  const checkoutToken = await cko.tokens.request({
+    type: "applepay",
+    token_data: {
+      version,
+      data,
+      signature,
+      header: {
+        ephemeralPublicKey: header.ephemeralPublicKey,
+        publicKeyHash: header.publicKeyHash,
+        transactionId: header.transactionId,
+      },
+    },
+  });
+
+  const payment = cko.payment.request({
+    source: {
+      token: checkoutToken.token,
+    },
+    amount: 1,
+    currency: "USD",
+  });
+
+  res.send(payment);
 });
 
 module.exports = router;
