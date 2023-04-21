@@ -49,34 +49,38 @@ router.post("/validateSession", async (req, res) => {
 router.post("/pay", async (req, res) => {
   const { version, data, signature, header } = req.body.token.paymentData;
 
-  const checkoutToken = await cko.tokens.request({
-    type: "applepay",
-    token_data: {
-      version,
-      data,
-      signature,
-      header: {
-        ephemeralPublicKey: header.ephemeralPublicKey,
-        publicKeyHash: header.publicKeyHash,
-        transactionId: header.transactionId,
+  try {
+    const checkoutToken = await cko.tokens.request({
+      type: "applepay",
+      token_data: {
+        version,
+        data,
+        signature,
+        header: {
+          ephemeralPublicKey: header.ephemeralPublicKey,
+          publicKeyHash: header.publicKeyHash,
+          transactionId: header.transactionId,
+        },
       },
-    },
-  });
+    });
 
-  write(checkoutToken, "CKO TOKEN");
+    write(checkoutToken, "CKO TOKEN");
 
-  const payment = await cko.payments.request({
-    source: {
-      token: checkoutToken.token,
-    },
-    processing_channel_id: "pc_jsefibhslk6e7ckyjpkkbihw4y",
-    amount: 1,
-    currency: "USD",
-  });
+    const payment = await cko.payments.request({
+      source: {
+        token: checkoutToken.token,
+      },
+      processing_channel_id: "pc_jsefibhslk6e7ckyjpkkbihw4y",
+      amount: 1,
+      currency: "USD",
+    });
 
-  write(payment, "PAYMENT REQUEST");
+    write(payment, "PAYMENT REQUEST");
 
-  res.send(payment);
+    res.send(payment);
+  } catch (e) {
+    res.send(e);
+  }
 });
 
 module.exports = router;
