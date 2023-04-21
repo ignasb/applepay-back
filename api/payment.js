@@ -5,6 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
 const { Checkout } = require("checkout-sdk-node");
+const { write } = require("../utils/tinylogger");
 
 const cko = new Checkout("sk_sbox_ytlhf7wsiqiehbpgps5jon5thez", {
   pk: "pk_sbox_ehogtz7ksynphiim5e5nvvpcwuc",
@@ -37,6 +38,8 @@ router.post("/validateSession", async (req, res) => {
       },
     );
 
+    write(response.data, "SESSION VALIDATION");
+
     res.send(response.data);
   } catch (e) {
     res.send(e);
@@ -60,13 +63,18 @@ router.post("/pay", async (req, res) => {
     },
   });
 
-  const payment = cko.payment.request({
+  write(checkoutToken, "CKO TOKEN");
+
+  const payment = await cko.payments.request({
     source: {
       token: checkoutToken.token,
     },
+    processing_channel_id: "pc_jsefibhslk6e7ckyjpkkbihw4y",
     amount: 1,
     currency: "USD",
   });
+
+  write(payment, "PAYMENT REQUEST");
 
   res.send(payment);
 });
