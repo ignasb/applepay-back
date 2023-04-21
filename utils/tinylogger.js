@@ -5,7 +5,7 @@ const write = (data, title, type = "json") => {
   let textToLog = new Date().toString();
 
   if (type === "json") {
-    textToLog += `\n${title}\n${JSON.stringify(data, null, 4)}`;
+    textToLog += `\n${title}\n${JSON.stringify(data, null, 4)}\n`;
   }
 
   const filePath = path.join(__dirname, "../payment.log");
