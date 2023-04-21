@@ -21,9 +21,7 @@ router.post("/validateSession", async (req, res) => {
   try {
     const httpsAgent = new https.Agent({
       rejectUnauthorized: false,
-      cert: await fs.readFileSync(
-        path.join(__dirname, "../certificates/merch.cer"),
-      ),
+      cert: fs.readFileSync(path.join(__dirname, "../certificates/merch.cer")),
       key: fs.readFileSync(path.join(__dirname, "../certificates/merch.key")),
     });
 
